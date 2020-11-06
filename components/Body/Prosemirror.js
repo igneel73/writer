@@ -24,6 +24,10 @@ export default function ProseMirror(props) {
   const viewHost = useRef();
   const view = useRef(null);
 
+  function handleInput() {
+    props.setView(view.current);
+  }
+
   useEffect(() => {
     // initial render
     const state = EditorState.create({
@@ -32,7 +36,7 @@ export default function ProseMirror(props) {
     });
     view.current = new EditorView(viewHost.current, { state });
     return () => view.current.destroy();
-  }, []);
+  }, []); //J: this empty array is why this useEffect never runs again
 
   useEffect(() => {
     // every render
@@ -40,5 +44,5 @@ export default function ProseMirror(props) {
     view.current.dispatch(tr);
   });
 
-  return <div ref={viewHost} />;
+  return <div ref={viewHost} onKeyUp={handleInput} />;
 }
